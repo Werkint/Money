@@ -1,0 +1,26 @@
+{
+    "name":        "werkint/money",
+    "description": "PHP implementation of Fowler's Money pattern",
+    "license":     "MIT",
+    "authors":     [
+        {
+            "name":  "Mathias Verraes",
+            "email": "mathias@verraes.net"
+        },
+        {
+            "name":  "Bogdan Yurov",
+            "email": "bogdan@yurov.me"
+        }
+    ],
+    "require":     {
+        "php": ">=5.4"
+    },
+    "suggest":     {
+        "werkint/money-bundle": "Support for Symfony2 and currency provider"
+    },
+    "autoload":    {
+        "psr-0": {
+            "Werkint\\Money": "src"
+        }
+    }
+}

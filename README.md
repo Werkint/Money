@@ -1,4 +1,4 @@
 Money
 =====
 
-Werkint money library
+Money library
