@@ -1,4 +1,4 @@
 Money
 =====
 
-Money library
+Money library. Inspired by Mathias Verraes

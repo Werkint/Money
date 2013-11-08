@@ -1,12 +1,8 @@
 {
     "name":        "werkint/money",
     "description": "PHP implementation of Fowler's Money pattern",
-    "license":     "MIT",
+    "license":     "GPL-3.0+",
     "authors":     [
-        {
-            "name":  "Mathias Verraes",
-            "email": "mathias@verraes.net"
-        },
         {
             "name":  "Bogdan Yurov",
             "email": "bogdan@yurov.me"
