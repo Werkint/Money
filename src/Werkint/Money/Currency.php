@@ -5,21 +5,23 @@ use Werkint\Money\Contract\CurrencyInterface;
 
 /**
  * Class Currency
+ *
  * @package Werkint\Money
  */
 class Currency implements
     CurrencyInterface
 {
-    /** @var string */
     protected $name;
-    /** @var int */
     protected $subunits;
 
     /**
-     * {@inheritdoc}
+     * @param string $name
+     * @param int    $subunits
      */
-    public function __construct($name, $subunits)
-    {
+    public function __construct(
+        $name,
+        $subunits
+    ) {
         $this->name = $name;
         $this->subunits = $subunits;
     }
