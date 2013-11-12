@@ -9,6 +9,13 @@ namespace Werkint\Money\Contract;
 interface CurrencyInterface
 {
     /**
+     * Currency title
+     *
+     * @return string
+     */
+    public function getTitle();
+
+    /**
      * Currency name
      *
      * @return string

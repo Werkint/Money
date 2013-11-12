@@ -9,11 +9,6 @@ use Werkint\Money\Exception\InvalidArgumentException;
  */
 interface MoneyInterface
 {
-    const ROUND_HALF_UP = PHP_ROUND_HALF_UP;
-    const ROUND_HALF_DOWN = PHP_ROUND_HALF_DOWN;
-    const ROUND_HALF_EVEN = PHP_ROUND_HALF_EVEN;
-    const ROUND_HALF_ODD = PHP_ROUND_HALF_ODD;
-
     /**
      * Creates a Money instance
      * @param  CurrencyInterface $currency
@@ -64,7 +59,7 @@ interface MoneyInterface
     public function getTitle();
 
     /**
-     * @return float
+     * @return string
      */
     public function getAmount();
 

@@ -2,6 +2,7 @@
 namespace Werkint\Money;
 
 use Werkint\Money\Contract\CurrencyInterface;
+use Werkint\Money\Exception\InvalidArgumentException;
 
 /**
  * Class Currency
@@ -17,12 +18,17 @@ class Currency implements
     /**
      * @param string $name
      * @param int    $subunits
+     * @throws Exception\InvalidArgumentException
      */
     public function __construct(
         $name,
-        $subunits
+        $subunits = 0
     ) {
-        $this->name = $name;
+        if ($subunits != abs(ceil($subunits))) {
+            throw new InvalidArgumentException('Wrong subunits value');
+        }
+
+        $this->name = strtoupper($name);
         $this->subunits = $subunits;
     }
 
@@ -32,6 +38,14 @@ class Currency implements
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTitle()
+    {
+        return $this->getName();
     }
 
     /**

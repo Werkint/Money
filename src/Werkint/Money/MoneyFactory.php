@@ -8,12 +8,16 @@ use Werkint\Money\Exception\InvalidArgumentException;
 /**
  * Class MoneyFactory
  * @package Werkint\Money
+ * @see http://www.regular-expressions.info/floatingpoint.html
  */
 class MoneyFactory implements
     MoneyFactoryInterface
 {
     protected $provider;
 
+    /**
+     * @param CurrencyProviderInterface $provider
+     */
     public function __construct(
         CurrencyProviderInterface $provider
     ) {
@@ -47,7 +51,7 @@ class MoneyFactory implements
     public function currencyPairIso($iso)
     {
         $currency = "([A-Z]{2,3})";
-        $ratio = "([0-9]*\.?[0-9]+)"; // @see http://www.regular-expressions.info/floatingpoint.html
+        $ratio = "([0-9]*\.?[0-9]+)";
         $pattern = '#' . $currency . '/' . $currency . ' ' . $ratio . '#';
 
         $matches = [];

@@ -7,11 +7,14 @@ use Werkint\Money\Exception\InvalidArgumentException;
 
 /**
  * Class Money
+ *
  * @package Werkint\Money
  */
 class Money implements
     MoneyInterface
 {
+    const SEPARATOR = '.';
+
     /** @var int */
     protected $amountSup;
     /** @var int */
@@ -33,7 +36,7 @@ class Money implements
 
         $this->amountSup = floor($amount);
         $sub = $amount - $this->amountSup;
-        $sub /= 1 / $currency->getSubunits();
+        $sub /= 1 / pow(10, $currency->getSubunits());
         $this->amountSub = $sub;
         $this->currency = $currency;
     }
@@ -54,7 +57,7 @@ class Money implements
         if (!$this->isSameCurrency($other)) {
             return false;
         }
-        return $this->getAmount() == $other->getAmount();
+        return $this->getAmount() === $other->getAmount();
     }
 
     /**
@@ -90,8 +93,8 @@ class Money implements
      */
     public function getAmount()
     {
-        $sub = $this->amountSub / $this->currency->getSubunits();
-        return $this->amountSup + $sub;
+        $sub = $this->amountSub / pow(10, $this->currency->getSubunits());
+        return (string)($this->amountSup + $sub);
     }
 
     /**
@@ -99,7 +102,8 @@ class Money implements
      */
     public function getTitle()
     {
-        return $this->getAmount() . ' ' . $this->getCurrency()->getName();
+        $amount = $this->amountSup . static::SEPARATOR . round($this->amountSub);
+        return $amount . ' ' . $this->getCurrency()->getTitle();
     }
 
     /**
@@ -167,7 +171,7 @@ class Money implements
      */
     public function isZero()
     {
-        return $this->getAmount() === 0;
+        return $this->getAmount() === '0';
     }
 
     /**
@@ -175,7 +179,7 @@ class Money implements
      */
     public function isPositive()
     {
-        return $this->getAmount() > 0;
+        return $this->getAmount() >= 0;
     }
 
     /**
@@ -205,22 +209,6 @@ class Money implements
     {
         if (!$this->isSameCurrency($other)) {
             throw new InvalidArgumentException('Different currencies');
-        }
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    protected function assertRoundingMode($rounding_mode)
-    {
-        $modes = [
-            self::ROUND_HALF_DOWN,
-            self::ROUND_HALF_EVEN,
-            self::ROUND_HALF_ODD,
-            self::ROUND_HALF_UP,
-        ];
-        if (!in_array($rounding_mode, $modes)) {
-            throw new InvalidArgumentException('Rounding mode should be Money::ROUND_HALF_DOWN | Money::ROUND_HALF_EVEN | Money::ROUND_HALF_ODD | Money::ROUND_HALF_UP');
         }
     }
 
