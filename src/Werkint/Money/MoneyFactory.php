@@ -7,8 +7,9 @@ use Werkint\Money\Exception\InvalidArgumentException;
 
 /**
  * Class MoneyFactory
+ *
  * @package Werkint\Money
- * @see http://www.regular-expressions.info/floatingpoint.html
+ * @see     http://www.regular-expressions.info/floatingpoint.html
  */
 class MoneyFactory implements
     MoneyFactoryInterface
@@ -31,7 +32,7 @@ class MoneyFactory implements
     {
         $currency = $this->createCurrency($currency);
 
-        return new Money($currency, $amount);
+        return new Money($currency->getName(), $amount);
     }
 
     /**

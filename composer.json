@@ -9,6 +9,8 @@
         }
     ],
     "require":     {
+        "litipk/php-bignumbers": "*",
+
         "php": ">=5.4"
     },
     "suggest":     {

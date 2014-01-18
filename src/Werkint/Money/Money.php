@@ -1,7 +1,7 @@
 <?php
 namespace Werkint\Money;
 
-use Werkint\Money\Contract\CurrencyInterface;
+use Litipk\BigNumbers\Decimal;
 use Werkint\Money\Contract\MoneyInterface;
 use Werkint\Money\Exception\InvalidArgumentException;
 
@@ -13,32 +13,22 @@ use Werkint\Money\Exception\InvalidArgumentException;
 class Money implements
     MoneyInterface
 {
-    const SEPARATOR = '.';
-
-    /** @var int */
-    protected $amountSup;
-    /** @var int */
-    protected $amountSub;
-
-    /** @var CurrencyInterface */
+    protected $amount;
     protected $currency;
 
     /**
-     * {@inheritdoc}
+     * Creates a Money instance
+     *
+     * @param  string $currency
+     * @param  string $amount
+     * @throws Exception\InvalidArgumentException
      */
     public function __construct(
-        CurrencyInterface $currency,
+        $currency,
         $amount
     ) {
-        if (!is_numeric($amount)) {
-            throw new InvalidArgumentException("Amount should be numeric");
-        }
-
-        $this->amountSup = floor($amount);
-        $sub = $amount - $this->amountSup;
-        $sub /= 1 / pow(10, $currency->getSubunits());
-        $this->amountSub = $sub;
         $this->currency = $currency;
+        $this->amount = Decimal::create($amount, static::PLACES_FRACTION);
     }
 
     /**
@@ -46,7 +36,16 @@ class Money implements
      */
     public function isSameCurrency(MoneyInterface $other)
     {
-        return $this->currency->equals($other->getCurrency());
+        return $this->currency == $other->getCurrency();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function compare(MoneyInterface $other)
+    {
+        $this->assertSameCurrency($other);
+        return $this->amount->comp($other->getAmountDecimal());
     }
 
     /**
@@ -57,19 +56,7 @@ class Money implements
         if (!$this->isSameCurrency($other)) {
             return false;
         }
-        return $this->getAmount() === $other->getAmount();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function compare(MoneyInterface $other)
-    {
-        $this->assertSameCurrency($other);
-        if ($this->getAmount() == $other->getAmount()) {
-            return 0;
-        }
-        return $this->getAmount() < $other->getAmount() ? -1 : 1;
+        return 0 == $this->compare($other);
     }
 
     /**
@@ -93,8 +80,33 @@ class Money implements
      */
     public function getAmount()
     {
-        $sub = $this->amountSub / pow(10, $this->currency->getSubunits());
-        return (string)($this->amountSup + $sub);
+        $amount = (string)$this->amount;
+        $amount = preg_replace('!(\.[0-9]*?)0+$!', '$1', $amount);
+        if ($amount[strlen($amount) - 1] == '.') {
+            $amount = substr($amount, 0, strlen($amount) - 1);
+        }
+        return $amount;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAmountFixed()
+    {
+        $amount = explode(static::SEPARATOR, $this->getAmount());
+        $ret = str_pad($amount[0], static::PLACES_FLOOR, '0', STR_PAD_LEFT);
+        $ret .= static::SEPARATOR;
+        $amount = isset($amount[1]) ? $amount[1] : '0';
+        $ret .= str_pad($amount, static::PLACES_FRACTION, '0', STR_PAD_RIGHT);
+        return $ret;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAmountDecimal()
+    {
+        return $this->amount;
     }
 
     /**
@@ -102,8 +114,7 @@ class Money implements
      */
     public function getTitle()
     {
-        $amount = $this->amountSup . static::SEPARATOR . round($this->amountSub);
-        return $amount . ' ' . $this->getCurrency()->getTitle();
+        return $this->getCurrency() . ' ' . $this->getAmount();
     }
 
     /**
@@ -121,10 +132,7 @@ class Money implements
     {
         $this->assertSameCurrency($money);
 
-        return new static(
-            $this->currency,
-            $this->getAmount() + $money->getAmount()
-        );
+        $this->amount->add($money->getAmountDecimal());
     }
 
     /**
@@ -134,10 +142,7 @@ class Money implements
     {
         $this->assertSameCurrency($money);
 
-        return new static(
-            $this->currency,
-            $this->getAmount() - $money->getAmount()
-        );
+        $this->amount->sub($money->getAmountDecimal());
     }
 
     /**
@@ -147,10 +152,7 @@ class Money implements
     {
         $this->assertOperand($multiplier);
 
-        return new Money(
-            $this->currency,
-            $this->getAmount() * $multiplier
-        );
+        $this->amount->mul(Decimal::create($multiplier));
     }
 
     /**
@@ -160,10 +162,7 @@ class Money implements
     {
         $this->assertOperand($divisor);
 
-        return new Money(
-            $this->currency,
-            $this->getAmount() / $divisor
-        );
+        $this->amount->div(Decimal::create($divisor));
     }
 
     /**
@@ -171,7 +170,7 @@ class Money implements
      */
     public function isZero()
     {
-        return $this->getAmount() === '0';
+        return 0 == $this->amount->comp(Decimal::create(0));
     }
 
     /**
@@ -179,7 +178,7 @@ class Money implements
      */
     public function isPositive()
     {
-        return $this->getAmount() >= 0;
+        return 1 == $this->amount->comp(Decimal::create(0));
     }
 
     /**
@@ -187,10 +186,18 @@ class Money implements
      */
     public function isNegative()
     {
-        return $this->getAmount() < 0;
+        return -1 == $this->amount->comp(Decimal::create(0));
     }
 
     // -- Helpers ---------------------------------------
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 
     /**
      * @throws InvalidArgumentException

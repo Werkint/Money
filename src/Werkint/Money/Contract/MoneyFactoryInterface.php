@@ -13,7 +13,7 @@ interface MoneyFactoryInterface
      * Creates money object
      * @param $currency
      * @param $amount
-     * @return Money
+     * @return MoneyInterface
      */
     public function create($currency, $amount);
 

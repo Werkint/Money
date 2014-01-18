@@ -1,24 +1,22 @@
 <?php
 namespace Werkint\Money\Contract;
 
+use Litipk\BigNumbers\Decimal;
 use Werkint\Money\Exception\InvalidArgumentException;
 
 /**
  * Class MoneyInterface
+ *
  * @package Werkint\Money\Contract
  */
 interface MoneyInterface
 {
-    /**
-     * Creates a Money instance
-     * @param  CurrencyInterface $currency
-     * @param  float             $amount
-     * @return MoneyInterface
-     */
-    public function __construct(
-        CurrencyInterface $currency,
-        $amount
-    );
+    // floating separator
+    const SEPARATOR = '.';
+    // places for floor part
+    const PLACES_FLOOR = 20;
+    // places for fraction
+    const PLACES_FRACTION = 10;
 
     /**
      * @param MoneyInterface $other
@@ -64,32 +62,42 @@ interface MoneyInterface
     public function getAmount();
 
     /**
-     * @return CurrencyInterface
+     * Returns amount with padded zeros
+     *
+     * @return string
+     */
+    public function getAmountFixed();
+
+    /**
+     * Returns Decimal object
+     *
+     * @return Decimal
+     */
+    public function getAmountDecimal();
+
+    /**
+     * @return string
      */
     public function getCurrency();
 
     /**
      * @param MoneyInterface $addend
-     * @return MoneyInterface
      */
     public function add(MoneyInterface $addend);
 
     /**
      * @param MoneyInterface $subtrahend
-     * @return MoneyInterface
      */
     public function subtract(MoneyInterface $subtrahend);
 
     /**
      * @param float $multiplier
-     * @return MoneyInterface
      * @throws InvalidArgumentException
      */
     public function multiply($multiplier);
 
     /**
      * @param float $divisor
-     * @return MoneyInterface
      * @throws InvalidArgumentException
      */
     public function divide($divisor);
