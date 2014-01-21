@@ -17,8 +17,8 @@
         "werkint/money-bundle": "Support for Symfony2 and currency provider"
     },
     "autoload":    {
-        "psr-0": {
-            "Werkint\\Money": "src"
+        "psr-4": {
+            "Werkint\\Money\\": "src/"
         }
     },
     "extra":       {
