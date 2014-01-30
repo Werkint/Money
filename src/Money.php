@@ -132,7 +132,10 @@ class Money implements
     {
         $this->assertSameCurrency($money);
 
-        $this->amount->add($money->getAmountDecimal());
+        return new static(
+            $this->currency,
+            $this->amount->add($money->getAmountDecimal())
+        );
     }
 
     /**
@@ -142,7 +145,10 @@ class Money implements
     {
         $this->assertSameCurrency($money);
 
-        $this->amount->sub($money->getAmountDecimal());
+        return new static(
+            $this->currency,
+            $this->amount->sub($money->getAmountDecimal())
+        );
     }
 
     /**
@@ -152,7 +158,10 @@ class Money implements
     {
         $this->assertOperand($multiplier);
 
-        $this->amount->mul(Decimal::create($multiplier));
+        return new static(
+            $this->currency,
+            $this->amount->mul(Decimal::create($multiplier))
+        );
     }
 
     /**
@@ -162,7 +171,10 @@ class Money implements
     {
         $this->assertOperand($divisor);
 
-        $this->amount->div(Decimal::create($divisor));
+        return new static(
+            $this->currency,
+            $this->amount->div(Decimal::create($divisor))
+        );
     }
 
     /**

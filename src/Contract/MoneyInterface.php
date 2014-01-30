@@ -82,22 +82,26 @@ interface MoneyInterface
 
     /**
      * @param MoneyInterface $addend
+     * @return MoneyInterface
      */
     public function add(MoneyInterface $addend);
 
     /**
      * @param MoneyInterface $subtrahend
+     * @return MoneyInterface
      */
     public function subtract(MoneyInterface $subtrahend);
 
     /**
      * @param float $multiplier
+     * @return MoneyInterface
      * @throws InvalidArgumentException
      */
     public function multiply($multiplier);
 
     /**
      * @param float $divisor
+     * @return MoneyInterface
      * @throws InvalidArgumentException
      */
     public function divide($divisor);
