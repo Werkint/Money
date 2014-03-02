@@ -1,6 +1,8 @@
 <?php
 namespace Werkint\Money\Contract;
 
+use Werkint\Money\Exception\UnsupportedCurrencypairException;
+
 /**
  * RatesConvertInterface.
  *
@@ -25,4 +27,24 @@ interface RatesConvertInterface
      * @return MoneyInterface
      */
     public function toDefaultQuick(MoneyInterface $money);
+
+    /**
+     * Converts money instance to another currency
+     *
+     * @param MoneyInterface $money
+     * @param string         $currency
+     * @throws UnsupportedCurrencypairException
+     * @return MoneyInterface
+     */
+    public function toCurrency(MoneyInterface $money, $currency);
+
+    /**
+     * Quickly onverts money instance to another currency
+     *
+     * @param MoneyInterface $money
+     * @param string         $currency
+     * @throws UnsupportedCurrencypairException
+     * @return MoneyInterface
+     */
+    public function toCurrencyQuick(MoneyInterface $money, $currency);
 }

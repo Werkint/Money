@@ -78,10 +78,15 @@ class Money implements
     /**
      * {@inheritdoc}
      */
-    public function getAmount()
+    public function getAmount($places = null)
     {
-        $amount = (string)$this->amount;
+        $amount = $this->amount;
+        if ($places !== null) {
+            $amount = $amount->round($places);
+        }
+        $amount = (string)$amount;
         $amount = preg_replace('!(\.[0-9]*?)0+$!', '$1', $amount);
+
         if ($amount[strlen($amount) - 1] == '.') {
             $amount = substr($amount, 0, strlen($amount) - 1);
         }

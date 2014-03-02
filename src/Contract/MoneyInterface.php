@@ -57,9 +57,10 @@ interface MoneyInterface
     public function getTitle();
 
     /**
+     * @param int|null $places
      * @return string
      */
-    public function getAmount();
+    public function getAmount($places = null);
 
     /**
      * Returns amount with padded zeros

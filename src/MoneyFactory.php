@@ -40,7 +40,7 @@ class MoneyFactory implements
      */
     public function createCurrency($class)
     {
-        $class = strtoupper($class);
+        $class = strtolower($class);
         $this->assertCurrencyExists($class);
 
         return $this->provider->getCurrency($class);

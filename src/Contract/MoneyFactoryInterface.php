@@ -5,20 +5,22 @@ use Werkint\Money\Money;
 
 /**
  * Class MoneyFactoryInterface
+ *
  * @package Werkint\Money\Contract
  */
 interface MoneyFactoryInterface
 {
     /**
      * Creates money object
-     * @param $currency
-     * @param $amount
+     *
+     * @param string $currency
+     * @param float  $amount
      * @return MoneyInterface
      */
     public function create($currency, $amount);
 
     /**
-     * @param  string $iso String representation of the form "EUR/USD 1.2500"
+     * @param string $iso String representation of the form "EUR/USD 1.2500"
      * @throws \Exception
      * @return CurrencyPairInterface
      */
