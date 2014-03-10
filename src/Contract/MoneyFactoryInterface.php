@@ -1,7 +1,6 @@
 <?php
 namespace Werkint\Money\Contract;
 
-use Werkint\Money\Money;
 
 /**
  * Class MoneyFactoryInterface
@@ -25,5 +24,11 @@ interface MoneyFactoryInterface
      * @return CurrencyPairInterface
      */
     public function currencyPairIso($iso);
+
+    /**
+     * @param string $class
+     * @return CurrencyInterface
+     */
+    public function createCurrency($class);
 
 }
