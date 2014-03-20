@@ -45,7 +45,7 @@ class Money implements
     public function compare(MoneyInterface $other)
     {
         $this->assertSameCurrency($other);
-        return $this->amount->comp($other->getAmountDecimal());
+        return $this->amount->comp($other->getAmountDecimal(), 10);
     }
 
     /**
@@ -187,7 +187,7 @@ class Money implements
      */
     public function isZero()
     {
-        return 0 == $this->amount->comp(Decimal::create(0));
+        return 0 == $this->amount->comp(Decimal::create(0), 10);
     }
 
     /**
@@ -195,7 +195,7 @@ class Money implements
      */
     public function isPositive()
     {
-        return 1 == $this->amount->comp(Decimal::create(0));
+        return 1 == $this->amount->comp(Decimal::create(0), 10);
     }
 
     /**
@@ -203,7 +203,7 @@ class Money implements
      */
     public function isNegative()
     {
-        return -1 == $this->amount->comp(Decimal::create(0));
+        return -1 == $this->amount->comp(Decimal::create(0), 10);
     }
 
     // -- Helpers ---------------------------------------
