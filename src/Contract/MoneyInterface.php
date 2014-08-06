@@ -9,7 +9,9 @@ use Werkint\Money\Exception\InvalidArgumentException;
  *
  * @package Werkint\Money\Contract
  */
-interface MoneyInterface
+interface MoneyInterface extends
+    \Serializable,
+    \JsonSerializable
 {
     // floating separator
     const SEPARATOR = '.';

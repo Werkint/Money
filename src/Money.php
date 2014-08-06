@@ -236,4 +236,37 @@ class Money implements
         }
     }
 
+    // -- Serialize ---------------------------------------
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serialize()
+    {
+        return serialize([
+            'amount'   => $this->amount,
+            'currency' => $this->currency,
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unserialize($data)
+    {
+        $data = unserialize($data);
+        $this->amount = $data['amount'];
+        $this->currency = $data['currency'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'amount'   => $this->amount,
+            'currency' => $this->currency,
+        ];
+    }
 }
