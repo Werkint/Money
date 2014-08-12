@@ -137,9 +137,17 @@ class Money implements
     {
         $this->assertSameCurrency($money);
 
+        return $this->addAmount($money->getAmountDecimal());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addAmount($addend)
+    {
         return new static(
             $this->currency,
-            $this->amount->add($money->getAmountDecimal())
+            $this->amount->add(Decimal::create($addend, static::PLACES_FRACTION))
         );
     }
 
