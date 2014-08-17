@@ -90,6 +90,12 @@ interface MoneyInterface extends
     public function add(MoneyInterface $addend);
 
     /**
+     * @param string $addend
+     * @return MoneyInterface
+     */
+    public function addAmount($addend);
+
+    /**
      * @param MoneyInterface $subtrahend
      * @return MoneyInterface
      */
