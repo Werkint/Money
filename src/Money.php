@@ -32,6 +32,16 @@ class Money implements
     }
 
     /**
+     * @param  string $currency
+     * @param  string $amount
+     * @return Money
+     */
+    protected function createThis($currency, $amount)
+    {
+        return new static($currency, $amount);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isSameCurrency(MoneyInterface $other)
@@ -145,7 +155,7 @@ class Money implements
      */
     public function addAmount($addend)
     {
-        return new static(
+        return $this->createThis(
             $this->currency,
             $this->amount->add(Decimal::create($addend, static::PLACES_FRACTION))
         );
@@ -158,7 +168,7 @@ class Money implements
     {
         $this->assertSameCurrency($money);
 
-        return new static(
+        return $this->createThis(
             $this->currency,
             $this->amount->sub($money->getAmountDecimal())
         );
@@ -171,7 +181,7 @@ class Money implements
     {
         $this->assertOperand($multiplier);
 
-        return new static(
+        return $this->createThis(
             $this->currency,
             $this->amount->mul(Decimal::create($multiplier))
         );
@@ -184,7 +194,7 @@ class Money implements
     {
         $this->assertOperand($divisor);
 
-        return new static(
+        return $this->createThis(
             $this->currency,
             $this->amount->div(Decimal::create($divisor))
         );
