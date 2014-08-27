@@ -273,8 +273,9 @@ class Money implements
     public function jsonSerialize()
     {
         return [
-            'amount'   => $this->amount,
-            'currency' => $this->currency,
+            'amount'   => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+            'title'    => $this->getTitle(),
         ];
     }
 }
